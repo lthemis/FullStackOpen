@@ -1,53 +1,51 @@
-import Course from "./components/Course"
+import React, { useState } from 'react'
+import Filter from './components/Filter'
+import Form from './components/Form'
+import Person from './components/Person'
 
 const App = () => {
-  const courses = [
-    {
-      name: 'Half Stack application development',
-      id: 1,
-      parts: [
-        {
-          name: 'Fundamentals of React',
-          exercises: 10,
-          id: 1
-        },
-        {
-          name: 'Using props to pass data',
-          exercises: 7,
-          id: 2
-        },
-        {
-          name: 'State of a component',
-          exercises: 14,
-          id: 3
-        },
-        {
-          name: 'Redux',
-          exercises: 11,
-          id: 4
-        }
-      ]
-    }, 
-    {
-      name: 'Node.js',
-      id: 2,
-      parts: [
-        {
-          name: 'Routing',
-          exercises: 3,
-          id: 1
-        },
-        {
-          name: 'Middlewares',
-          exercises: 7,
-          id: 2
-        }
-      ]
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', phone: 123123123, id:1 }
+  ]) 
+  const [newName, setNewName] = useState('')
+  const [newNum, setNewNum] = useState('')
+  const [filterVal, setFilter] = useState('')
+
+  const addNewPerson = (event) => {
+    event.preventDefault()
+    const newPersonObj = {
+      name: newName,
+      num: newNum,
+      id: persons.length+1
     }
-  ]
+    persons.map(person => person.name).includes(newName) ?
+      alert(`${newName} is already added`) : 
+      setPersons(persons.concat(newPersonObj))
+      setNewName('')
+      setNewNum('')
 
+  }
 
-  return <Course courses={courses} />
+  const handleNoteChange = (event) => {
+    setNewName(event.target.value)
+  }
+
+  const handleNumChange = (event) => {
+    setNewNum(event.target.value)
+  }
+
+  const handleFilter = (event) => {
+    setFilter(event.target.value)
+  }
+
+  return (
+    <div>
+      <Filter handleFilter={handleFilter}/>
+      <h2>Phonebook</h2>
+      <Form addNewPerson={addNewPerson} handleNoteChange={handleNoteChange} handleNumChange={handleNumChange} newName={newName} newNum={newNum}/>
+      <Person persons={persons} filterVal={filterVal} />
+    </div>
+  )
 }
 
-export default App;
+export default App
