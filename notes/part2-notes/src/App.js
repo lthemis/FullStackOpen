@@ -1,10 +1,23 @@
-import React, {isValidElement, useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Note from './components/Note'
+import axios from 'axios'
 
 const App = (props) => {
-  const [notes, setNotes] = useState(props.notes);
+  const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('No notes')
   const [showAll, setShowAll] = useState(true)
+
+  const hook = () => {
+    console.log('effect');
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        console.log('fulfilled');
+        setNotes(response.data)
+      })
+  }
+
+  useEffect(hook, [])
 
   const notesToShow = showAll ? 
     notes :
